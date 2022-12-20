@@ -15,7 +15,7 @@ module.exports = {
       options: {
         api_url: "https://pdx.social/api/v2/",
         limit: 7,
-        access_token: "",
+        access_token: process.env.MASTO_ACCESS_TOKEN,
       },
     },
   ],
