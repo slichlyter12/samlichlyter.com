@@ -15,7 +15,7 @@ module.exports = {
       options: {
         api_url: "https://pdx.social/api/v2/",
         limit: 7,
-        access_token: "Z_oSZA62-KcPDT_n160P-osMCz18pVJY0XVwK-fWHjQ",
+        access_token: "",
       },
     },
   ],
