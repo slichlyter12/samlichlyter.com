@@ -1,6 +1,11 @@
 /**
  * @type {import('gatsby').GatsbyConfig}
  */
+
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
+
 module.exports = {
   siteMetadata: {
     title: `samlichlyter.com`,
@@ -13,8 +18,8 @@ module.exports = {
     {
       resolve: "gatsby-source-mastodon",
       options: {
-        api_url: "https://pdx.social/api/v2/",
-        limit: 7,
+        api_url: "https://pdx.social/api/v1/",
+        limit: 100,
         access_token: process.env.MASTO_ACCESS_TOKEN,
       },
     },

@@ -1,7 +1,7 @@
 # samlichlyter.com
 
 <img
-  src="img/20221220-wip-home.png"
+  src="img/20221228-wip-home.png"
   alt="A screenshot of Sam's website as of Dec 20, 2022"
   style="max-width: 600px;"
 />
