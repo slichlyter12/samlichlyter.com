@@ -19,7 +19,7 @@ module.exports = {
       resolve: "gatsby-source-mastodon",
       options: {
         api_url: "https://pdx.social/api/v1/",
-        limit: 100,
+        limit: 10,
         access_token: process.env.MASTO_ACCESS_TOKEN,
       },
     },

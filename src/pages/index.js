@@ -11,7 +11,7 @@ import SocialLink from "../components/social-link";
 
 export const query = graphql`
   query Toots {
-    allToot(limit: 4) {
+    allToot(sort: { created_at: DESC }, limit: 7) {
       nodes {
         content
         account {
@@ -22,13 +22,24 @@ export const query = graphql`
         id
         reblog {
           content
+          url
           account {
             avatar
-            username
             display_name
-            id
+            username
+          }
+          media_attachments {
+            url
+            description
+            meta {
+              small {
+                height
+                width
+              }
+            }
           }
         }
+        url
       }
     }
   }
@@ -64,7 +75,7 @@ const IndexPage = ({ data }) => {
   ];
 
   return (
-    <main className="m-0 bg-gradient-to-r from-rose-800 to-orange-600 bg-scroll p-5 text-white">
+    <main className="m-0 h-full bg-gradient-to-r from-rose-800 to-orange-600 bg-scroll p-5 text-white">
       <div className="flex">
         <div>
           <StaticImage
@@ -73,7 +84,7 @@ const IndexPage = ({ data }) => {
             alt="Sam wearing a Boston Red Sox baseball cap and a tan scarf with the Portland Thorns logo. Sam is a white man, in his late 20's with a short red-ish brown beard."
             src="../images/profile.jpeg"
           />
-          <div className="pt-24">
+          <div className="sticky top-2 left-0 mb-auto">
             <p>You can find me at:</p>
             <ul className="text-lg">
               {socials.map((social) => (
@@ -81,12 +92,11 @@ const IndexPage = ({ data }) => {
               ))}
             </ul>
           </div>
-          <div className="grow"></div>
         </div>
         <div className="h-full w-2/3">
           <h1 className="text-8xl">Sam Lichlyter</h1>
           <h2 className="text-2xl">{random(greetings)} 👋🏻</h2>
-          <div className="ml-5 w-full pt-24">
+          <div className="ml-5 w-full pt-12">
             <p>What I've been saying lately:</p>
             {data.allToot.nodes.map((toot) => (
               <MastodonToot toot={toot} key={toot.id} />
