@@ -58,16 +58,19 @@ const IndexPage = ({ data }) => {
 
   const socials = [
     {
+      socialType: "mastodon",
       name: "@samlichlyter@pdx.social",
       icon: faMastodon,
       link: "https://pdx.social/@samlichlyter",
     },
     {
+      socialType: "instagram",
       name: "@slichlyter12",
       icon: faInstagram,
       link: "https://www.instagram.com/slichlyter12/",
     },
     {
+      socialType: "github",
       name: "@slichlyter12",
       icon: faGithub,
       link: "https://github.com/slichlyter12",
