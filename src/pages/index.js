@@ -1,5 +1,4 @@
-import * as React from "react";
-import { graphql } from "gatsby";
+import React, { useState, useEffect } from "react";
 import { StaticImage } from "gatsby-plugin-image";
 import {
   faInstagram,
@@ -9,43 +8,7 @@ import {
 import MastodonToot from "../components/mastodon-toot";
 import SocialLink from "../components/social-link";
 
-export const query = graphql`
-  query Toots {
-    allToot(sort: { created_at: DESC }, limit: 7) {
-      nodes {
-        content
-        account {
-          avatar
-          display_name
-          username
-        }
-        id
-        reblog {
-          content
-          url
-          account {
-            avatar
-            display_name
-            username
-          }
-          media_attachments {
-            url
-            description
-            meta {
-              small {
-                height
-                width
-              }
-            }
-          }
-        }
-        url
-      }
-    }
-  }
-`;
-
-const IndexPage = ({ data }) => {
+const IndexPage = () => {
   const greetings = [
     "Hello there!",
     "Welcome to my humble internet abode!",
@@ -77,6 +40,20 @@ const IndexPage = ({ data }) => {
     },
   ];
 
+  const [toots, setToots] = useState([]);
+  useEffect(() => {
+    fetch(
+      `https://pdx.social/api/v1/accounts/109299434483023005/statuses?limit=5`
+    )
+      .then((response) => response.json())
+      .then((results) => {
+        setToots(results);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <main className="m-0 h-full bg-gradient-to-r from-rose-800 to-orange-600 bg-scroll p-5 text-white">
       <div className="flex">
@@ -101,7 +78,7 @@ const IndexPage = ({ data }) => {
           <h2 className="text-2xl">{random(greetings)} 👋🏻</h2>
           <div className="ml-5 w-full pt-12">
             <p>What I've been saying lately:</p>
-            {data.allToot.nodes.map((toot) => (
+            {toots.map((toot) => (
               <MastodonToot toot={toot} key={toot.id} />
             ))}
           </div>
