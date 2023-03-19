@@ -12,8 +12,7 @@
     "start": "gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve",
-    "clean": "gatsby clean",
-    "deploy": "NODE_ENV=production && npm run build && gatsby-plugin-s3 deploy"
+    "clean": "gatsby clean"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
