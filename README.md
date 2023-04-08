@@ -1,19 +1,23 @@
-# Welcome
+# samlichlyter.com
 
-## About
+<img
+  src="img/20221228-wip-home.png"
+  alt="A screenshot of Sam's website as of Dec 20, 2022"
+  style="max-width: 600px;"
+/>
 
-This website is designed and developed by me. I’m gonna go out on a limb and assume you’re currently looking at my GitHub. If you are, then please take a look around and see how I built this website. Below is a list of technologies I used and ones I might plan to switch to. Welcome to everything me!
+This is v2 of my personal website.
+It's currently a work in progress and yet to be deployed anywhere.
 
-<img src="img/wide.png" width="600px" />
-<img src="img/compact.png" width="300px" />
+The end goal is to have a place where all of my public, online activity can be gathered together.
+This currently includes my Mastodon posts (toots) and boosts, and will soon include my Pixelfed and Instagram posts, and maybe eventually my GitHub activity.
 
-## Technologies:
+All of this is done using GatsbyJS to hook into my social networks which posts can be queried using GraphQL.
+To learn more about GatsbyJS see the list of technologies below.
 
-### Web Technologies Used:
+## Built Using:
 
-- PHP 7.1
-- CSS 3
-
-### Tools Used:
-
-- Coda 2
+- [React v18](https://reactjs.org)
+- [GatsbyJS](https://www.gatsbyjs.com)
+- [TailwindCSS](https://tailwindcss.com)
+- [FontAwesome Icons](https://fontawesome.com)
