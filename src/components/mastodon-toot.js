@@ -2,15 +2,14 @@ import * as React from "react";
 
 class MastodonToot extends React.Component {
   render() {
-    // console.log(this.props.toot);
     let {
       content,
       account: { avatar, display_name, username },
       url,
+      media_attachments,
     } = this.props.toot;
 
     const reblog = this.props.toot.reblog;
-    let media = [];
     if (reblog !== null) {
       content = reblog.content;
       avatar = reblog.account.avatar;
@@ -18,7 +17,7 @@ class MastodonToot extends React.Component {
       username = reblog.account.username;
       url = reblog.url;
       if (reblog.media_attachments !== []) {
-        media = reblog.media_attachments;
+        media_attachments = reblog.media_attachments;
       }
     }
 
@@ -50,7 +49,7 @@ class MastodonToot extends React.Component {
             className="space-y-5 text-black"
             dangerouslySetInnerHTML={tootContent}
           ></span>
-          {media.map((image) => (
+          {media_attachments.map((image) => (
             <img
               src={image.url}
               alt={image.description}
