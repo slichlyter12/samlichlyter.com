@@ -5,7 +5,10 @@
   "description": "samlichlyter.com",
   "author": "Sam Lichlyter",
   "keywords": [
-    "gatsby"
+    "gatsby",
+    "personal website",
+    "tailwindcss",
+    "react"
   ],
   "scripts": {
     "develop": "gatsby develop",
