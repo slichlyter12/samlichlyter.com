@@ -1,19 +1,12 @@
-/* Strictly black & white; follows the browser's light/dark preference. */
+/* Tokens and base styles. Scene geometry lives in layout.css. */
 :root {
-  --bg: #fff;
-  --fg: #000;
-  --fg-dim: color-mix(in srgb, var(--fg) 60%, var(--bg));
-  --rule: color-mix(in srgb, var(--fg) 25%, var(--bg));
-  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo,
-    Consolas, monospace;
-  color-scheme: light dark;
-}
+  --wood: #5a3c28;
+  --ink: #161616;
+  --font-ui: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --font-hand: "Caveat", "Bradley Hand", "Segoe Print", cursive;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #000;
-    --fg: #fff;
-  }
+  /* Fine monochrome noise, used for film grain and the glass frosting. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 *,
@@ -22,27 +15,24 @@
   box-sizing: border-box;
 }
 
+html {
+  background: var(--wood);
+}
+
 body {
   margin: 0;
-  min-height: 100dvh;
-  display: grid;
-  place-items: center;
-  padding: 1.5rem;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-mono);
-  font-size: 1rem;
-  line-height: 1.6;
+  background: var(--wood);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
   color: inherit;
-  text-underline-offset: 0.2em;
 }
 
-a:hover,
-a:focus-visible {
-  background: var(--fg);
-  color: var(--bg);
-  text-decoration: none;
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
 }

@@ -1,0 +1,142 @@
+---
+import Icon from "./Icon.astro";
+import { site } from "../config";
+
+interface Props {
+  headline?: string;
+  body?: string;
+  headingLevel?: "h1" | "h2";
+}
+
+const {
+  headline = site.intro.headline,
+  body = site.intro.body,
+  headingLevel: Heading = "h2",
+} = Astro.props;
+---
+
+<!-- Sizes are in design px via --u (see layout.css); the panel is 600x512 on the 1440x900 stage. -->
+<section class="panel">
+  <Heading class="headline">{headline}</Heading>
+  <hr class="groove" />
+  <p class="body">{body}</p>
+  <div class="actions">
+    <slot name="actions">
+      {
+        site.links.map((link) => (
+          <a class="button" href={link.href} rel="me">
+            <Icon icon={link.icon} />
+            <span>{link.label}</span>
+          </a>
+        ))
+      }
+    </slot>
+  </div>
+</section>
+
+<style>
+  .panel {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(512 * var(--u));
+    padding: calc(48 * var(--u));
+    border: calc(1.5 * var(--u)) solid transparent;
+    border-radius: calc(36 * var(--u));
+    color: var(--ink);
+    /* Fill (padding box) over a bright-to-soft edge highlight (border box). */
+    background:
+      linear-gradient(149deg, #ffffffbd, #ffffff6a) padding-box,
+      linear-gradient(149deg, #ffffff, #ffffff66 50%, #ffffffcc) border-box;
+    -webkit-backdrop-filter: blur(calc(16 * var(--u))) saturate(1.3);
+    backdrop-filter: blur(calc(16 * var(--u))) saturate(1.3);
+    box-shadow:
+      0 calc(28 * var(--u)) calc(54 * var(--u)) calc(-10 * var(--u)) #00000040,
+      inset 0 calc(2 * var(--u)) calc(3 * var(--u)) #ffffffb3,
+      inset 0 calc(-4 * var(--u)) calc(8 * var(--u)) #00000029;
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .panel {
+      background:
+        linear-gradient(149deg, #fffffff2, #ffffffd6) padding-box,
+        linear-gradient(149deg, #ffffff, #ffffff66 50%, #ffffffcc) border-box;
+    }
+  }
+
+  /* Frosting grain on the glass itself. */
+  .panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: var(--grain);
+    background-size: 256px;
+    mix-blend-mode: overlay;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .headline {
+    margin: 0;
+    font-size: calc(38 * var(--u));
+    font-weight: 500;
+    line-height: calc(44 / 38);
+    letter-spacing: -0.02em;
+    text-shadow: 0 calc(1.5 * var(--u)) 0 #ffffffe6;
+  }
+
+  /* A pressed groove: dark line over a light line. */
+  .groove {
+    height: calc(3 * var(--u));
+    margin: calc(28 * var(--u)) 0 calc(24 * var(--u));
+    border: 0;
+    background: linear-gradient(#00000033 50%, #ffffffe6 50%);
+  }
+
+  .body {
+    margin: 0;
+    font-size: calc(23 * var(--u));
+    line-height: calc(34 / 23);
+    color: #161616cc;
+    text-shadow: 0 calc(1.5 * var(--u)) 0 #ffffffe6;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(16 * var(--u));
+    margin-top: auto;
+    padding-top: calc(24 * var(--u));
+  }
+
+  /* :global so links slotted in from a page (e.g. 404) get the same look. */
+  .panel :global(.button) {
+    display: flex;
+    flex: 1 1 calc(200 * var(--u));
+    align-items: center;
+    justify-content: center;
+    gap: calc(16 * var(--u));
+    height: calc(64 * var(--u));
+    padding-inline: calc(20 * var(--u));
+    border: calc(1.5 * var(--u)) solid #fff;
+    border-radius: calc(32 * var(--u));
+    font-size: calc(24 * var(--u));
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+    background: linear-gradient(#fffffff2, #ffffff80);
+    box-shadow:
+      0 calc(1 * var(--u)) calc(2 * var(--u)) #00000033,
+      0 calc(12 * var(--u)) calc(20 * var(--u)) calc(-6 * var(--u)) #00000040,
+      inset 0 calc(-3 * var(--u)) calc(4 * var(--u)) #00000026;
+  }
+
+  .panel :global(.button:hover) {
+    background: linear-gradient(#ffffff, #ffffffa6);
+  }
+
+  .panel :global(.button svg) {
+    flex: none;
+    font-size: calc(28 * var(--u));
+  }
+</style>

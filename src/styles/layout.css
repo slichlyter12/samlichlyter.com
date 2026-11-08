@@ -1,0 +1,131 @@
+/*
+ * Scene geometry. The desk is a 1440x900 composition ("stage"). Live elements are
+ * placed in that design's pixel coordinates, scaled by --stage-u (1 design px).
+ * The stage always covers the viewport, so the Polaroid stays on the legal pad.
+ *
+ * Narrow/portrait screens switch to a scrolling stack (see the media query).
+ */
+
+.scene {
+  position: relative;
+  height: 100svh;
+  overflow: clip;
+}
+
+/* Both layers share one box: the 16:10 stage, centered and cropped to cover. */
+.stage,
+.content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100vw, 160svh);
+  aspect-ratio: 16 / 10;
+  translate: -50% -50%;
+  container-type: inline-size;
+  --stage-u: calc(100cqw / 1440);
+}
+
+.desk,
+.desk img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Warm grade + film grain over everything, so live elements match the raster. */
+.grade,
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.grade {
+  background: #ffb06a;
+  mix-blend-mode: soft-light;
+  opacity: 0.25;
+}
+
+.grain {
+  background-image: var(--grain);
+  background-size: 256px;
+  mix-blend-mode: overlay;
+  opacity: 0.17;
+}
+
+/* Placement of the live elements, in design pixels. */
+.content > .polaroid {
+  --u: var(--stage-u);
+  position: absolute;
+  left: calc(165 * var(--u));
+  top: calc(269 * var(--u));
+  width: calc(331 * var(--u));
+  rotate: 4deg;
+}
+
+.content > .panel {
+  --u: var(--stage-u);
+  position: absolute;
+  left: calc(690 * var(--u));
+  top: calc(194 * var(--u));
+  width: calc(600 * var(--u));
+}
+
+/* Portrait, small, or very short screens: desk becomes a fixed backdrop and the
+   Polaroid and panel stack in one scrolling column. */
+@media (max-aspect-ratio: 5 / 4), (max-width: 1000px), (max-height: 500px) {
+  .scene {
+    height: auto;
+    min-height: 100svh;
+    overflow: visible;
+  }
+
+  .stage {
+    position: fixed;
+    inset: 0;
+    left: 0;
+    top: 0;
+    width: auto;
+    aspect-ratio: auto;
+    translate: none;
+    container-type: normal;
+  }
+
+  .desk img {
+    object-position: 28% 50%;
+  }
+
+  .content {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    aspect-ratio: auto;
+    translate: none;
+    container-type: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.75rem;
+    padding: 2.5rem 1rem 3rem;
+  }
+
+  .content > .polaroid {
+    --u: calc(min(320px, 100vw - 4rem) / 331);
+    position: relative;
+    left: auto;
+    top: auto;
+    rotate: 3deg;
+    margin-block: 0.75rem;
+  }
+
+  .content > .panel {
+    --u: 0.9px;
+    position: relative;
+    left: auto;
+    top: auto;
+    width: min(calc(600 * var(--u)), 100%);
+  }
+}

@@ -1,10 +1,19 @@
 ---
 import Base from "../layouts/Base.astro";
+import DeskScene from "../components/DeskScene.astro";
+import GlassPanel from "../components/GlassPanel.astro";
 ---
 
-<Base title="404 | Sam Lichlyter">
+<Base title="Page not found | Sam Lichlyter">
   <main>
-    <p>$ cat page</p>
-    <p><strong>404</strong> no such file. <a href="/">cd ~</a></p>
+    <DeskScene>
+      <GlassPanel
+        headingLevel="h1"
+        headline="Page not found"
+        body="That page doesn't exist, or it has moved. The home page is the best place to start."
+      >
+        <a slot="actions" class="button" href="/">Back to the home page</a>
+      </GlassPanel>
+    </DeskScene>
   </main>
 </Base>

@@ -1,10 +1,15 @@
 ---
 import Base from "../layouts/Base.astro";
-import Terminal from "../components/Terminal.astro";
+import DeskScene from "../components/DeskScene.astro";
+import Polaroid from "../components/Polaroid.astro";
+import GlassPanel from "../components/GlassPanel.astro";
 ---
 
 <Base>
   <main>
-    <Terminal />
+    <DeskScene>
+      <Polaroid />
+      <GlassPanel />
+    </DeskScene>
   </main>
 </Base>

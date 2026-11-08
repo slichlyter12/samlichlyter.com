@@ -1,4 +1,6 @@
 ---
+import "@fontsource/caveat/latin-500.css";
+import "@fontsource/caveat/latin-700.css";
 import "../styles/global.css";
 import { site } from "../config";
 
@@ -18,6 +20,7 @@ const canonical = new URL(Astro.url.pathname, site.url);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#5a3c28" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:title" content={title} />
