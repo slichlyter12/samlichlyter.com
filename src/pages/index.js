@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StaticImage } from "gatsby-plugin-image";
 import {
   faBluesky,
-  faMastodon,
   faGithub,
   faLinkedin,
+  faMastodon,
 } from "@fortawesome/free-brands-svg-icons";
 import MastodonToot from "../components/mastodon-toot";
 import SocialLink from "../components/social-link";
 import PixelfedPost from "../components/pixelfed-post";
 
 const mycomponent = () => {
-  const somedata = "data"
-}
+  const somedata = "data";
+};
 
 const IndexPage = () => {
   const greetings = [
@@ -55,7 +55,7 @@ const IndexPage = () => {
   const [toots, setToots] = useState([]);
   useEffect(() => {
     fetch(
-      `https://pdx.social/api/v1/accounts/109299434483023005/statuses?limit=15`
+      `https://pdx.social/api/v1/accounts/109299434483023005/statuses?limit=15`,
     )
       .then((response) => response.json())
       .then((results) => {
@@ -69,7 +69,7 @@ const IndexPage = () => {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     fetch(
-      `https://pixelfed.pdx.social/api/pixelfed/v1/accounts/510533981864091649/statuses?limit=5&only_media=true`
+      `https://pixelfed.pdx.social/api/pixelfed/v1/accounts/510533981864091649/statuses?limit=5&only_media=true`,
     )
       .then((response) => response.json())
       .then((results) => {
@@ -104,12 +104,8 @@ const IndexPage = () => {
           <h2 className="text-2xl">{random(greetings)} 👋🏻</h2>
           <div className="ml-5 w-full pt-12">
             <p>What I've been saying lately:</p>
-            {toots.map((toot) => (
-              <MastodonToot toot={toot} key={toot.id} />
-            ))}
-            {posts.map((post) => (
-              <PixelfedPost post={post} key={post.id} />
-            ))}
+            {toots.map((toot) => <MastodonToot toot={toot} key={toot.id} />)}
+            {posts.map((post) => <PixelfedPost post={post} key={post.id} />)}
           </div>
         </div>
       </div>

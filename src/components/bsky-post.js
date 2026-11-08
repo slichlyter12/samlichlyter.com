@@ -24,7 +24,8 @@ class BskyPost extends React.Component {
           <span
             className="space-y-5 text-black"
             dangerouslySetInnerHTML={tootContent}
-          ></span>
+          >
+          </span>
         </div>
       </div>
     );

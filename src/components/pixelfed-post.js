@@ -36,7 +36,8 @@ class PixelfedPost extends React.Component {
           <span
             className="space-y-5 text-black"
             dangerouslySetInnerHTML={postContent}
-          ></span>
+          >
+          </span>
           {media_attachments.map((image) => (
             <>
               <img

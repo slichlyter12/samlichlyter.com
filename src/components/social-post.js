@@ -15,11 +15,9 @@ class SocialPost extends React.Component {
     return (
       <div className="group relative mb-1 w-2/3 max-w-screen-md snap-y rounded-md bg-white p-2">
         <button
-          className={
-            "absolute bottom-0 right-0 z-10 m-1 mt-auto hidden content-center rounded-md " +
+          className={"absolute bottom-0 right-0 z-10 m-1 mt-auto hidden content-center rounded-md " +
             { buttonColor } +
-            " group-hover:block} p-1 blur-none"
-          }
+            " group-hover:block} p-1 blur-none"}
           onClick={() => window.open(url, "_blank")}
         >
           {buttonText}
@@ -39,7 +37,8 @@ class SocialPost extends React.Component {
           <span
             className="space-y-5 text-black"
             dangerouslySetInnerHTML={content}
-          ></span>
+          >
+          </span>
           {media_attachments.map((image) => (
             <img
               src={image.url}

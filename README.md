@@ -6,11 +6,12 @@
   style="max-width: 600px;"
 />
 
-This is v2 of my personal website.
-It's currently a work in progress.
+This is v2 of my personal website. It's currently a work in progress.
 
-The end goal is to have a place where all of my public, online activity can be gathered together.
-This currently includes my Mastodon posts (toots) and boosts, and will soon include my Pixelfed and Instagram posts, and maybe eventually my GitHub activity.
+The end goal is to have a place where all of my public, online activity can be
+gathered together. This currently includes my Mastodon posts (toots) and boosts,
+and will soon include my Pixelfed and Instagram posts, and maybe eventually my
+GitHub activity.
 
 To learn more about GatsbyJS see the list of technologies below.
 
