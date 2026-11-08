@@ -1,0 +1,15 @@
+meta {
+  name: Bsky Posts
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=samlichlyter.bsky.social
+  body: none
+  auth: none
+}
+
+params:query {
+  actor: samlichlyter.bsky.social
+}

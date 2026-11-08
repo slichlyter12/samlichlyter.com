@@ -1,4 +1,5 @@
 import * as React from "react";
+import SocialPost from "./social-post";
 
 class MastodonToot extends React.Component {
   render() {
@@ -16,7 +17,7 @@ class MastodonToot extends React.Component {
       display_name = reblog.account.display_name;
       username = reblog.account.username;
       url = reblog.url;
-      if (reblog.media_attachments !== []) {
+      if (reblog.media_attachments) {
         media_attachments = reblog.media_attachments;
       }
     }
@@ -26,39 +27,16 @@ class MastodonToot extends React.Component {
     };
 
     return (
-      <div className="group relative mb-1 w-2/3 max-w-screen-md snap-y rounded-md bg-white p-2">
-        <button
-          className="absolute bottom-0 right-0 z-10 m-1 mt-auto hidden content-center rounded-md bg-masto-violet p-1 blur-none group-hover:block"
-          onClick={() => window.open(url, "_blank")}
-        >
-          View on Mastodon
-        </button>
-        <div className="flex">
-          <img
-            src={avatar}
-            alt=""
-            className="aspect-square w-1/12 rounded-md"
-          />
-          <div className="w-4/5 pl-2">
-            <p className="text-black">{display_name}</p>
-            <p className="text-slate-600">@{username}</p>
-          </div>
-        </div>
-        <div className="space-y-2 p-2">
-          <span
-            className="space-y-5 text-black"
-            dangerouslySetInnerHTML={tootContent}
-          ></span>
-          {media_attachments.map((image) => (
-            <img
-              src={image.url}
-              alt={image.description}
-              key={image.description}
-              className="w-1/3 rounded-lg"
-            />
-          ))}
-        </div>
-      </div>
+      <SocialPost
+        content={tootContent}
+        avatar={avatar}
+        displayName={display_name}
+        username={username}
+        url={url}
+        media_attachments={media_attachments}
+        buttonColor={"bg-masto-purple"}
+        buttonText="View on Mastodon"
+      />
     );
   }
 }

@@ -11,6 +11,7 @@ module.exports = {
     extend: {
       colors: {
         "masto-violet": "#6364ff",
+        "bsky-blue": "#146efe",
       },
     },
   },
