@@ -9,3 +9,4 @@ terraform/.terraform/
 *.tfstate
 *.tfstate.*
 *.tfplan
+*.plan
