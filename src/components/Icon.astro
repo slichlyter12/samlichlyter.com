@@ -1,17 +1,18 @@
 ---
-import type { IconDefinition } from "@fortawesome/free-brands-svg-icons";
+import type { IconDefinition as BrandIconDefinition } from "@fortawesome/free-brands-svg-icons";
+import type { IconDefinition as SolidIconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
-  icon: IconDefinition;
+  icon: BrandIconDefinition | SolidIconDefinition;
 }
 
 // Inline SVG from a Font Awesome icon definition; no client-side JS or CSS needed.
-const [width, height, , , path] = Astro.props.icon.icon;
+const [w, h, , , path] = Astro.props.icon.icon;
 ---
 
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  viewBox={`0 0 ${width} ${height}`}
+  viewBox={`0 0 ${w} ${h}`}
   width="1em"
   height="1em"
   fill="currentColor"

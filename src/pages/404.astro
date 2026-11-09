@@ -1,19 +1,18 @@
 ---
+// 404: centered column on the same stage — no profile photo or find-me pane.
 import Base from "../layouts/Base.astro";
-import DeskScene from "../components/DeskScene.astro";
-import GlassPanel from "../components/GlassPanel.astro";
 ---
 
 <Base title="Page not found | Sam Lichlyter">
-  <main>
-    <DeskScene>
-      <GlassPanel
-        headingLevel="h1"
-        headline="Page not found"
-        body="That page doesn't exist, or it has moved. The home page is the best place to start."
-      >
-        <a slot="actions" class="button" href="/">Back to the home page</a>
-      </GlassPanel>
-    </DeskScene>
+  <main class="scene">
+    <div class="stage">
+      <div class="content">
+        <div class="center">
+          <h1 class="title">Page not found</h1>
+          <p>That page doesn’t exist, or it has moved. The home page is the best place to start.</p>
+          <a class="button" href="/">Back to the home page</a>
+        </div>
+      </div>
+    </div>
   </main>
 </Base>

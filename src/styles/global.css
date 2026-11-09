@@ -1,29 +1,46 @@
 /* Tokens and base styles. Scene geometry lives in layout.css. */
-:root {
-  --wood: #5a3c28;
-  --ink: #161616;
-  --font-ui: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
-  --font-hand: "Caveat", "Bradley Hand", "Segoe Print", cursive;
 
-  /* Fine monochrome noise, used for film grain and the glass frosting. */
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+/* Font definition */
+@font-face {
+  font-family: "Fineliner";
+  src: url("../assets/fonts/Fineliner.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
 }
 
-*,
-*::before,
-*::after {
+/* Design tokens */
+:root {
+  color-scheme: light dark;
+  --font-hand: "Fineliner", cursive;
+  --bg: #fff;
+  --ink: #000;
+  --accent: #3271A1;
+}
+
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000;
+    --ink: #fff;
+    --accent: #3F8DC9;
+  }
+}
+
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
+/* Background for html element */
 html {
-  background: var(--wood);
+  background: var(--bg);
 }
 
+/* Base body styles */
 body {
   margin: 0;
-  background: var(--wood);
+  background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-ui);
+  font-family: var(--font-hand);
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
 }
@@ -32,6 +49,7 @@ a {
   color: inherit;
 }
 
+/* Focus-visible outline */
 :focus-visible {
   outline: 3px solid var(--ink);
   outline-offset: 3px;

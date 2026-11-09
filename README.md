@@ -1,43 +1,55 @@
 # samlichlyter.com
 
-Personal site: a photographic desk scene with a Polaroid of me and a frosted-glass panel
-for a short intro and links. Built to grow into project statuses, a small image gallery
-and an about page.
+Personal site: a handwritten one-pager on a single 16:9 "stage" — a circular profile
+photo and a blue "find me" pane on the left, and the name, role, and a short about on
+the right. All text is the Fineliner handwriting font, in light and dark themes that
+follow the system. Built to grow into project statuses, a small image gallery and an
+about page.
 
 **Stack:** [Astro](https://astro.build) (static output, plain CSS, no UI framework) ·
 Terraform (S3 + CloudFront + Route53) · GitHub Actions (OIDC deploy).
 
 ## How the page is built
 
-- **Desk scene (image):** wood, leather mat, legal pad, MacBook corner and iPhone are one
-  flat render from the Sketch design, `src/assets/desk.jpg`. Astro converts it to
-  AVIF/WebP at several widths.
-- **Polaroid and glass panel (live HTML/CSS):** real text and real links, so they stay
-  accessible and the panel's `backdrop-filter` frosts the actual desk behind it.
-- **Warm grade and film grain:** one full-screen CSS overlay so the live parts match the
-  render.
-- **Placement:** the desk is a 1440x900 "stage" that always covers the viewport, and live
-  elements are placed in that design's pixel coordinates (`src/styles/layout.css`). On
-  portrait or small screens the desk becomes a fixed backdrop and the Polaroid and panel
-  stack in a scrolling column.
+- **16:9 stage:** the page is a 2560x1440 composition that always covers the viewport
+  (cropping the edges on odd aspect ratios). Live elements sit in design-px coordinates
+  scaled by one CSS variable (`--stage-u` = 1 design px), so the layout tracks the
+  Sketch file.
+- **Live HTML, no scene render:** everything is real text and real links, so it stays
+  accessible; the "background" is just the theme's flat `--bg` color.
+- **Theme:** three tokens — `--bg`, `--ink`, `--accent` — swap with
+  `prefers-color-scheme` (light: `#fff` / `#000` / `#3271A1`; dark: `#000` / `#fff` /
+  `#3F8DC9`). The entire find-me pane is monochrome `--accent`, as in the design.
+- **Fallback:** on portrait, narrow, or very short screens the stage stops covering and
+  the two panes stack into one centered scrolling column with rem-sized type (the media
+  query in `src/styles/layout.css`).
 
 ## Editing content
 
-All copy lives in `src/config.ts`: name, role, company, the glass panel's headline and
-paragraph (currently **placeholder text**), and the links. Keep `rel="me"` on the
-Mastodon link; it is what lets Mastodon verify this site on the profile.
+All copy lives in `src/config.ts`: name, role, the three about paragraphs, and the
+links. Keep `rel="me"` on the Mastodon link; it is what lets Mastodon verify this site
+on the profile. The role and link labels render lowercase via CSS, so keep them in
+natural case in the config.
 
-The handwriting font is [Caveat](https://fontsource.org/fonts/caveat) (OFL), imported in
-`src/layouts/Base.astro`. To try another, install a different `@fontsource/*` package and
-change the two imports and `--font-hand` in `src/styles/global.css`.
+The handwriting font is **Fineliner** (variable, weight 100–900; the user's own
+`SamType.ttf` — free to use and embed), self-hosted as a Latin-subset WOFF2 at
+`src/assets/fonts/Fineliner.woff2` (preloaded in `Base.astro`, declared in
+`src/styles/global.css`). Keep the source TTF out of the build; regenerate the subset
+with `pyftsubset` if the glyph set changes.
 
-## Regenerating the desk image
+## Regenerating the profile image
 
-The scene was designed in Sketch ("Round 8 – Consistent scale"). To change it, duplicate
-that frame, delete the Polaroid, panel, film grain and warm grade layers, export the
-frame as a 2880x1800 JPEG (quality ~90), and replace `src/assets/desk.jpg`. Keep the
-grain out of the export (noise compresses badly); it is added back in CSS. The Sketch
-file is not stored in this repo.
+The design's circle is the exact center of the 3:2 source photo (a coffee mug by a
+window). The original file available is only 640x433, so the current
+`src/assets/profile.jpg` is the largest possible square center crop of it (433x433):
+
+```sh
+sips -c 433 433 "path/to/original.jpg" --out src/assets/profile.jpg   # -c = center crop
+```
+
+If a higher-resolution original (ideally 1200–1600px) becomes available, re-crop to a
+square at that size — the circle renders with `border-radius: 50%` + `object-fit:
+cover`, so any square source works.
 
 ## Develop
 
@@ -52,13 +64,13 @@ npm run build    # static site -> dist/
 ## Layout
 
 ```
-src/config.ts            name, role, copy, links (edit personal details here)
-src/assets/              desk.jpg (scene render) and profile.jpg (processed by Astro)
-src/layouts/Base.astro   shared <head>, fonts, page shell
-src/components/          DeskScene, Polaroid, GlassPanel, Icon
+src/config.ts            name, role, about, links (edit personal details here)
+src/assets/              profile.jpg and fonts/Fineliner.woff2 (processed by Astro)
+src/layouts/Base.astro   shared <head>, meta, page shell
+src/components/          FindMePane, Icon
 src/pages/               index and 404
-src/styles/global.css    tokens, base styles, grain
-src/styles/layout.css    scene geometry and the portrait/mobile switch
+src/styles/global.css    theme tokens, @font-face, base styles
+src/styles/layout.css    stage geometry and the portrait/mobile switch
 src/content/projects/    future project-status Markdown (schema in src/content.config.ts)
 terraform/               infrastructure (see below)
 ```

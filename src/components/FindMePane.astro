@@ -1,0 +1,104 @@
+---
+// Find-me pane: "find me" label + paper plane, underline, Mastodon + GitHub rows.
+// Entire pane is monochrome --accent; sized in design px via --stage-u.
+import Icon from "./Icon.astro";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { site } from "../config";
+---
+
+<div class="find-me-pane">
+  <div class="label-row">
+    <Icon icon={faPaperPlane} />
+    <span>find me</span>
+  </div>
+  <div class="underline" aria-hidden="true"></div>
+  {site.links.map((link) => (
+    <a class="row" href={link.href} rel={"rel" in link ? link.rel : undefined}>
+      <Icon icon={link.icon} />
+      <span>{link.label}</span>
+    </a>
+  ))}
+</div>
+
+<style>
+  .find-me-pane {
+    /* (54, 589) in frame coords: 24px inside the left pane, 70px below the circle. */
+    margin-top: calc(70 * var(--stage-u));
+    margin-left: calc(24 * var(--stage-u));
+    width: calc(465 * var(--stage-u));
+    display: flex;
+    flex-direction: column;
+    color: var(--accent);
+    font-family: var(--font-hand);
+    font-weight: 400;
+  }
+
+  .label-row {
+    display: flex;
+    align-items: center;
+    height: calc(75 * var(--stage-u));
+    padding-left: calc(90 * var(--stage-u));
+    font-size: calc(51 * var(--stage-u));
+  }
+
+  .label-row svg {
+    font-size: calc(53 * var(--stage-u));
+  }
+
+  .underline {
+    margin: calc(6 * var(--stage-u)) 0 calc(4 * var(--stage-u));
+    margin-left: calc(50 * var(--stage-u));
+    width: calc(373 * var(--stage-u));
+    height: calc(2 * var(--stage-u));
+    background: var(--accent);
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    height: calc(105 * var(--stage-u));
+    font-size: calc(70 * var(--stage-u));
+    text-transform: lowercase;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .row svg {
+    font-size: calc(103 * var(--stage-u));
+  }
+
+  /* Portrait / small / very short screens: rem-sized stack (matches layout.css). */
+  @media (max-aspect-ratio: 16 / 9), (max-width: 1000px), (max-height: 500px) {
+    .find-me-pane {
+      margin: 1.5rem 0 0;
+      width: min(320px, 100%);
+    }
+
+    .label-row {
+      height: auto;
+      padding-left: 0;
+      font-size: 1.3rem;
+    }
+
+    .label-row svg {
+      font-size: 1.3rem;
+    }
+
+    .underline {
+      margin: 0.75rem 0;
+      margin-left: 0;
+      width: 100%;
+      height: 2px;
+    }
+
+    .row {
+      height: auto;
+      padding: 0.5rem 0;
+      font-size: 1.3rem;
+    }
+
+    .row svg {
+      font-size: 2rem;
+    }
+  }
+</style>
