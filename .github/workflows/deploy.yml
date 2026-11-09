@@ -1,0 +1,77 @@
+name: Deploy
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never run two deploys at once; let an in-flight one finish.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      # CloudFront serves 404.html for every missing URL, so it must exist.
+      - run: test -f dist/index.html && test -f dist/404.html
+      - uses: actions/upload-artifact@v7
+        with:
+          name: site
+          path: dist
+          if-no-files-found: error
+
+  deploy:
+    # Only deploy merged commits on main, never pull requests.
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # OIDC token for AWS; no stored credentials
+      contents: read
+    env:
+      S3_BUCKET: ${{ vars.S3_BUCKET }}
+      CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: site
+          path: dist
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: us-west-2
+      # Order matters: assets first, then HTML, then delete stale files last,
+      # so visitors never see a page that points at a missing file.
+      - name: Upload hashed assets
+        run: |
+          aws s3 sync dist/ "s3://${S3_BUCKET}" \
+            --exclude "*.html" \
+            --cache-control "public, max-age=31536000, immutable"
+      - name: Upload HTML
+        run: |
+          aws s3 sync dist/ "s3://${S3_BUCKET}" \
+            --exclude "*" --include "*.html" \
+            --cache-control "no-cache"
+      # Uploads above are already newer, so this only removes files not in dist/
+      # (e.g. the old Gatsby site on first deploy).
+      - name: Remove stale files
+        run: aws s3 sync dist/ "s3://${S3_BUCKET}" --delete
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" \
+            --paths "/*"

@@ -1,0 +1,219 @@
+/*
+ * Scene geometry for the new one-pager. The page is a 2560x1440 (16:9)
+ * composition (the "stage") that always fits inside the viewport (letterboxed on wider screens; background is flat); live elements sit
+ * in design-px coordinates scaled by --stage-u (1 design px).
+ *
+ * The portrait/mobile breakpoint is repeated in FindMePane.astro and the
+ * `sizes` attribute in pages/index.astro (media queries can't use variables); keep all three in sync.
+ *
+ * Narrow / short screens switch to a centered scrolling column (media query below).
+ */
+
+.scene {
+  position: relative;
+  height: 100svh;
+  overflow: clip;
+}
+
+/* Both layers share one box: the 16:9 stage, centered and covering the viewport. */
+.stage,
+.content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(100vw, 177.78svh);
+  aspect-ratio: 16 / 9;
+  translate: -50% -50%;
+  container-type: inline-size;
+  --stage-u: calc(100cqw / 2560);
+}
+
+/* Left pane: (30, 30), 489 wide — profile circle on top, find-me pane below. */
+.left-pane {
+  position: absolute;
+  left: calc(30 * var(--stage-u));
+  top: calc(30 * var(--stage-u));
+  width: calc(489 * var(--stage-u));
+  display: flex;
+  flex-direction: column;
+}
+
+.left-pane picture,
+.left-pane img {
+  display: block;
+  width: 100%;
+  height: auto; /* beats the img height attribute so aspect-ratio makes a true circle */
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Right text column: (620, 144), 1745 wide — title, role, about. */
+.right-pane {
+  position: absolute;
+  left: calc(620 * var(--stage-u));
+  top: calc(144 * var(--stage-u));
+  width: calc(1745 * var(--stage-u));
+}
+
+/* Title: 194px / 700, box 1305x146, letter-spacing 6.5px. */
+.title {
+  margin: 0;
+  width: calc(1305 * var(--stage-u));
+  font-size: calc(194 * var(--stage-u));
+  font-weight: 700;
+  line-height: calc(146 * var(--stage-u));
+  letter-spacing: calc(6.5 * var(--stage-u));
+}
+
+/* Role: 70px / 400, 40px below the title box; renders lowercase. */
+.role {
+  margin: calc(40 * var(--stage-u)) 0 0;
+  font-size: calc(84 * var(--stage-u));
+  font-weight: 400;
+  line-height: calc(104 * var(--stage-u));
+  text-transform: lowercase;
+  color: var(--accent);
+}
+
+/* About: three 60px paragraphs, 48px below the role line. */
+.about {
+  margin-top: calc(48 * var(--stage-u));
+}
+
+.about p {
+  margin: 0;
+  font-size: calc(56 * var(--stage-u));
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.about p + p {
+  margin-top: calc(28 * var(--stage-u));
+}
+
+/* 404: centered column on the same stage, title sized like the home title. */
+.center {
+  position: absolute;
+  inset: 0;
+  width: calc(1305 * var(--stage-u));
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.center p {
+  margin: calc(36 * var(--stage-u)) 0 0;
+  font-size: calc(60 * var(--stage-u));
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+/* Link button on the 404 page: accent outline, inverts on hover. */
+.button {
+  margin-top: calc(60 * var(--stage-u));
+  padding: calc(28 * var(--stage-u)) calc(64 * var(--stage-u));
+  font-size: calc(46 * var(--stage-u));
+  font-weight: 400;
+  text-decoration: none;
+  color: var(--accent);
+  border: max(1px, calc(2 * var(--stage-u))) solid var(--accent);
+  border-radius: calc(34 * var(--stage-u));
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.button:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/*
+ * Portrait, narrow, or very short screens: the stage stops covering and the
+ * panes stack into one centered scrolling column with rem-sized type.
+ */
+@media (max-aspect-ratio: 16 / 9), (max-width: 1000px), (max-height: 560px) {
+  .scene {
+    height: auto;
+    overflow: visible;
+  }
+
+  .stage,
+  .content {
+    position: static;
+    width: 100%;
+    aspect-ratio: auto;
+    translate: none;
+    container-type: normal;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 2.5rem 1.5rem 3.5rem;
+  }
+
+  .left-pane {
+    position: static;
+    width: min(320px, 100%);
+  }
+
+  .right-pane {
+    position: static;
+    width: min(480px, 100%);
+    text-align: center;
+  }
+
+  .title {
+    width: auto;
+    font-size: 3rem;
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+  }
+
+  .role {
+    margin-top: 0.75rem;
+    font-size: 1.4rem;
+    line-height: 1.3;
+  }
+
+  .about {
+    margin-top: 1.25rem;
+  }
+
+  .about p {
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+
+  .about p + p {
+    margin-top: 1rem;
+  }
+
+  .center {
+    position: static;
+    width: min(520px, 100%);
+  }
+
+  .center .title {
+    font-size: 3rem;
+    line-height: 1.2;
+  }
+
+  .center p {
+    margin-top: 1.25rem;
+    font-size: 1.25rem;
+  }
+
+  .button {
+    margin-top: 2rem;
+    padding: 0.6rem 1.5rem;
+    font-size: 1.1rem;
+    border-width: 2px;
+    border-radius: 28px;
+  }
+}

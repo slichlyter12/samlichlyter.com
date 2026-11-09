@@ -1,31 +1,49 @@
 resource "aws_s3_bucket" "bucket" {
   bucket = var.bucket_name
-  tags   = var.common_tags
 }
 
-resource "aws_s3_bucket_acl" "bucket_acl" {
+# Private bucket: only CloudFront (via OAC) may read objects.
+resource "aws_s3_bucket_ownership_controls" "bucket" {
   bucket = aws_s3_bucket.bucket.id
-  acl    = "public-read"
-}
 
-resource "aws_s3_bucket_website_configuration" "bucket_website_config" {
-  bucket = aws_s3_bucket.bucket.id
-  index_document {
-    suffix = "index.html"
-  }
-
-  error_document {
-    key = "404.html"
+  rule {
+    object_ownership = "BucketOwnerEnforced"
   }
 }
 
-resource "aws_s3_bucket_cors_configuration" "bucket_cors_config" {
+data "aws_iam_policy_document" "bucket_read_from_cloudfront" {
+  statement {
+    sid       = "AllowCloudFrontRead"
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.s3_distribution.arn]
+    }
+  }
+}
+
+# Replaces the manually-created public-read policy. Applied only after the
+# distribution is deployed with OAC, so the site keeps serving during cutover.
+resource "aws_s3_bucket_policy" "bucket" {
+  bucket = aws_s3_bucket.bucket.id
+  policy = data.aws_iam_policy_document.bucket_read_from_cloudfront.json
+}
+
+resource "aws_s3_bucket_public_access_block" "bucket" {
   bucket = aws_s3_bucket.bucket.id
 
-  cors_rule {
-    allowed_headers = ["Content-Length"]
-    allowed_methods = ["GET"]
-    allowed_origins = ["https://${var.domain_name}"]
-    max_age_seconds = 300
-  }
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+
+  depends_on = [aws_s3_bucket_policy.bucket]
 }

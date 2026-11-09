@@ -1,0 +1,21 @@
+---
+import type { Icon } from "../icons";
+
+interface Props {
+  icon: Icon;
+}
+
+// Inline SVG from an icon tuple; no client-side JS or CSS needed.
+const [w, h, path] = Astro.props.icon;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={`0 0 ${w} ${h}`}
+  width="1em"
+  height="1em"
+  fill="currentColor"
+  aria-hidden="true"
+>
+  <path d={path}></path>
+</svg>

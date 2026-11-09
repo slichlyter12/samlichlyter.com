@@ -5,19 +5,20 @@ variable "domain_name" {
 
 variable "bucket_name" {
   type        = string
-  description = "Name of the bucket where the website will be hosted"
+  description = "Name of the bucket where the website is hosted"
 }
 
-variable "certificate_arn" {
+variable "github_repo" {
   type        = string
-  description = "ARN of the ACM certificate to use"
+  description = "GitHub repository (owner/name) allowed to deploy the site from its main branch"
 }
 
-variable "hosted_zone" {
+variable "origin_access_control_id" {
   type        = string
-  description = "ID of the Hosted Zone where domain should live"
+  description = "ID of the existing CloudFront Origin Access Control for the S3 bucket"
 }
 
 variable "common_tags" {
-  description = "Common tags applied to all components of this project"
+  type        = map(string)
+  description = "Tags applied to all resources in this project"
 }

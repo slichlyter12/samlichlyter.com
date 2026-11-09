@@ -1,0 +1,57 @@
+/* Tokens and base styles. Scene geometry lives in layout.css. */
+
+/* Font definition */
+@font-face {
+  font-family: "Fineliner";
+  src: url("../assets/fonts/Fineliner.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: block; /* preloaded; brief invisible text beats fallback text visibly jumping to Fineliner */
+}
+
+/* Design tokens */
+:root {
+  color-scheme: light dark;
+  --font-hand: "Fineliner", ui-monospace, monospace;
+  --bg: #fff;
+  --ink: #000;
+  --accent: #3271A1;
+}
+
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b0b0c;
+    --ink: #f2f2f2;
+    --accent: #3F8DC9;
+  }
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Background for html element */
+html {
+  background: var(--bg);
+}
+
+/* Base body styles */
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-hand);
+  line-height: 1.4;
+  font-synthesis: none; /* Fineliner is variable; never let a browser fake-bold it */
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+/* Focus-visible outline */
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}

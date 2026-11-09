@@ -1,0 +1,41 @@
+---
+// Home page: the 2560x1440 one-pager from the Sketch design.
+// Left pane: profile photo (circular) + find-me pane.
+// Right pane: title, role, and the three about paragraphs.
+import Base from "../layouts/Base.astro";
+import { site } from "../config";
+import FindMePane from "../components/FindMePane.astro";
+import { Picture } from "astro:assets";
+import profile from "../assets/profile.jpg";
+---
+
+<Base>
+  <main class="scene">
+    <div class="stage">
+      <div class="content">
+        <div class="left-pane">
+          <Picture
+            src={profile}
+            alt="Sam drinking from a lighthouse mug by a window"
+            formats={["avif", "webp"]}
+            widths={[240, 489, 978]}
+            sizes="((max-aspect-ratio: 16 / 9) or (max-width: 1000px) or (max-height: 560px)) 320px, calc(489 * min(100vw, 177.78svh) / 2560)"
+            loading="eager"
+            fetchpriority="high"
+          />
+          <FindMePane />
+        </div>
+
+        <div class="right-pane">
+          <h1 class="title">{site.name}</h1>
+          <p class="role">{site.role}</p>
+          <div class="about">
+            {site.about.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Base>

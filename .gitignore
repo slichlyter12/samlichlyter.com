@@ -1,4 +1,12 @@
 node_modules/
-.cache/
-public
-.terraform*
+dist/
+.astro/
+.DS_Store
+.env*
+
+# Terraform
+terraform/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.plan
