@@ -2,23 +2,23 @@
 // Find-me pane: "find me" label + paper plane, underline, Mastodon + GitHub rows.
 // Entire pane is monochrome --accent; sized in design px via --stage-u.
 import Icon from "./Icon.astro";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { icons } from "../icons";
 import { site } from "../config";
 ---
 
-<div class="find-me-pane">
+<nav class="find-me-pane" aria-label="Find me">
   <div class="label-row">
-    <Icon icon={faPaperPlane} />
+    <Icon icon={icons.paperPlane} />
     <span>find me</span>
   </div>
   <div class="underline" aria-hidden="true"></div>
   {site.links.map((link) => (
-    <a class="row" href={link.href} rel={"rel" in link ? link.rel : undefined}>
+    <a class="row" href={link.href} target="_blank" rel={"rel" in link ? link.rel : undefined}>
       <Icon icon={link.icon} />
       <span>{link.label}</span>
     </a>
   ))}
-</div>
+</nav>
 
 <style>
   .find-me-pane {
@@ -49,7 +49,7 @@ import { site } from "../config";
     margin: calc(6 * var(--stage-u)) 0 calc(4 * var(--stage-u));
     margin-left: calc(50 * var(--stage-u));
     width: calc(373 * var(--stage-u));
-    height: calc(2 * var(--stage-u));
+    height: max(1px, calc(2 * var(--stage-u)));
     background: var(--accent);
   }
 
@@ -63,12 +63,17 @@ import { site } from "../config";
     color: inherit;
   }
 
+  .row:hover span {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
   .row svg {
     font-size: calc(103 * var(--stage-u));
   }
 
   /* Portrait / small / very short screens: rem-sized stack (matches layout.css). */
-  @media (max-aspect-ratio: 16 / 9), (max-width: 1000px), (max-height: 500px) {
+  @media (max-aspect-ratio: 16 / 9), (max-width: 1000px), (max-height: 560px) {
     .find-me-pane {
       margin: 1.5rem 0 0;
       width: min(320px, 100%);

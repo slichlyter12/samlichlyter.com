@@ -19,7 +19,9 @@ import profile from "../assets/profile.jpg";
             alt="Sam drinking from a lighthouse mug by a window"
             formats={["avif", "webp"]}
             widths={[240, 489, 978]}
-            sizes="(max-aspect-ratio: 16 / 9), (max-width: 1000px), (max-height: 500px) 320px, calc(489 * max(100vw, 177.78svh) / 2560)"
+            sizes="((max-aspect-ratio: 16 / 9) or (max-width: 1000px) or (max-height: 560px)) 320px, calc(489 * min(100vw, 177.78svh) / 2560)"
+            loading="eager"
+            fetchpriority="high"
           />
           <FindMePane />
         </div>

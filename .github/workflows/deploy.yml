@@ -26,6 +26,8 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
+      # CloudFront serves 404.html for every missing URL, so it must exist.
+      - run: test -f dist/index.html && test -f dist/404.html
       - uses: actions/upload-artifact@v7
         with:
           name: site
@@ -52,20 +54,22 @@ jobs:
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: us-west-2
-      # Hashed assets are immutable; HTML must revalidate. Order matters:
-      # upload assets first so new HTML never references missing files.
+      # Order matters: assets first, then HTML, then delete stale files last,
+      # so visitors never see a page that points at a missing file.
       - name: Upload hashed assets
         run: |
           aws s3 sync dist/ "s3://${S3_BUCKET}" \
             --exclude "*.html" \
-            --cache-control "public, max-age=31536000, immutable" \
-            --delete
+            --cache-control "public, max-age=31536000, immutable"
       - name: Upload HTML
         run: |
           aws s3 sync dist/ "s3://${S3_BUCKET}" \
             --exclude "*" --include "*.html" \
-            --cache-control "no-cache" \
-            --delete
+            --cache-control "no-cache"
+      # Uploads above are already newer, so this only removes files not in dist/
+      # (e.g. the old Gatsby site on first deploy).
+      - name: Remove stale files
+        run: aws s3 sync dist/ "s3://${S3_BUCKET}" --delete
       - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation \

@@ -1,13 +1,12 @@
 ---
-import type { IconDefinition as BrandIconDefinition } from "@fortawesome/free-brands-svg-icons";
-import type { IconDefinition as SolidIconDefinition } from "@fortawesome/free-solid-svg-icons";
+import type { Icon } from "../icons";
 
 interface Props {
-  icon: BrandIconDefinition | SolidIconDefinition;
+  icon: Icon;
 }
 
-// Inline SVG from a Font Awesome icon definition; no client-side JS or CSS needed.
-const [w, h, , , path] = Astro.props.icon.icon;
+// Inline SVG from an icon tuple; no client-side JS or CSS needed.
+const [w, h, path] = Astro.props.icon;
 ---
 
 <svg
@@ -18,5 +17,5 @@ const [w, h, , , path] = Astro.props.icon.icon;
   fill="currentColor"
   aria-hidden="true"
 >
-  <path d={path as string}></path>
+  <path d={path}></path>
 </svg>

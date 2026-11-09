@@ -1,7 +1,10 @@
 /*
  * Scene geometry for the new one-pager. The page is a 2560x1440 (16:9)
- * composition (the "stage") that always covers the viewport; live elements sit
+ * composition (the "stage") that always fits inside the viewport (letterboxed on wider screens; background is flat); live elements sit
  * in design-px coordinates scaled by --stage-u (1 design px).
+ *
+ * The portrait/mobile breakpoint is repeated in FindMePane.astro and the
+ * `sizes` attribute in pages/index.astro (media queries can't use variables); keep all three in sync.
  *
  * Narrow / short screens switch to a centered scrolling column (media query below).
  */
@@ -18,7 +21,7 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: max(100vw, 177.78svh);
+  width: min(100vw, 177.78svh);
   aspect-ratio: 16 / 9;
   translate: -50% -50%;
   container-type: inline-size;
@@ -39,6 +42,7 @@
 .left-pane img {
   display: block;
   width: 100%;
+  height: auto; /* beats the img height attribute so aspect-ratio makes a true circle */
   aspect-ratio: 1;
   object-fit: cover;
   border-radius: 50%;
@@ -65,9 +69,9 @@
 /* Role: 70px / 400, 40px below the title box; renders lowercase. */
 .role {
   margin: calc(40 * var(--stage-u)) 0 0;
-  font-size: calc(70 * var(--stage-u));
+  font-size: calc(84 * var(--stage-u));
   font-weight: 400;
-  line-height: calc(97 * var(--stage-u));
+  line-height: calc(104 * var(--stage-u));
   text-transform: lowercase;
   color: var(--accent);
 }
@@ -79,9 +83,9 @@
 
 .about p {
   margin: 0;
-  font-size: calc(60 * var(--stage-u));
+  font-size: calc(56 * var(--stage-u));
   font-weight: 400;
-  line-height: 1.275;
+  line-height: 1.3;
 }
 
 .about p + p {
@@ -116,7 +120,7 @@
   font-weight: 400;
   text-decoration: none;
   color: var(--accent);
-  border: calc(2 * var(--stage-u)) solid var(--accent);
+  border: max(1px, calc(2 * var(--stage-u))) solid var(--accent);
   border-radius: calc(34 * var(--stage-u));
   transition: background-color 150ms ease, color 150ms ease;
 }
@@ -130,7 +134,7 @@
  * Portrait, narrow, or very short screens: the stage stops covering and the
  * panes stack into one centered scrolling column with rem-sized type.
  */
-@media (max-aspect-ratio: 16 / 9), (max-width: 1000px), (max-height: 500px) {
+@media (max-aspect-ratio: 16 / 9), (max-width: 1000px), (max-height: 560px) {
   .scene {
     height: auto;
     overflow: visible;

@@ -5,13 +5,13 @@
   font-family: "Fineliner";
   src: url("../assets/fonts/Fineliner.woff2") format("woff2");
   font-weight: 100 900;
-  font-display: swap;
+  font-display: block; /* preloaded; brief invisible text beats fallback text visibly jumping to Fineliner */
 }
 
 /* Design tokens */
 :root {
   color-scheme: light dark;
-  --font-hand: "Fineliner", cursive;
+  --font-hand: "Fineliner", ui-monospace, monospace;
   --bg: #fff;
   --ink: #000;
   --accent: #3271A1;
@@ -20,8 +20,8 @@
 /* Dark mode overrides */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #000;
-    --ink: #fff;
+    --bg: #0b0b0c;
+    --ink: #f2f2f2;
     --accent: #3F8DC9;
   }
 }
@@ -42,6 +42,7 @@ body {
   color: var(--ink);
   font-family: var(--font-hand);
   line-height: 1.4;
+  font-synthesis: none; /* Fineliner is variable; never let a browser fake-bold it */
   -webkit-font-smoothing: antialiased;
 }
 

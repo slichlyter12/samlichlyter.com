@@ -3,7 +3,7 @@
 Personal site: a handwritten one-pager on a single 16:9 "stage" — a circular profile
 photo and a blue "find me" pane on the left, and the name, role, and a short about on
 the right. All text is the Fineliner handwriting font, in light and dark themes that
-follow the system. Built to grow into project statuses, a small image gallery and an
+follow the system. Built to grow into a small image gallery and an
 about page.
 
 **Stack:** [Astro](https://astro.build) (static output, plain CSS, no UI framework) ·
@@ -11,8 +11,8 @@ Terraform (S3 + CloudFront + Route53) · GitHub Actions (OIDC deploy).
 
 ## How the page is built
 
-- **16:9 stage:** the page is a 2560x1440 composition that always covers the viewport
-  (cropping the edges on odd aspect ratios). Live elements sit in design-px coordinates
+- **16:9 stage:** the page is a 2560x1440 composition that always fits inside the viewport
+  (letterboxed on wider screens; the background is flat). Live elements sit in design-px coordinates
   scaled by one CSS variable (`--stage-u` = 1 design px), so the layout tracks the
   Sketch file.
 - **Live HTML, no scene render:** everything is real text and real links, so it stays
@@ -20,7 +20,7 @@ Terraform (S3 + CloudFront + Route53) · GitHub Actions (OIDC deploy).
 - **Theme:** three tokens — `--bg`, `--ink`, `--accent` — swap with
   `prefers-color-scheme` (light: `#fff` / `#000` / `#3271A1`; dark: `#000` / `#fff` /
   `#3F8DC9`). The entire find-me pane is monochrome `--accent`, as in the design.
-- **Fallback:** on portrait, narrow, or very short screens the stage stops covering and
+- **Fallback:** on portrait, narrow, or very short screens the stage is dropped and
   the two panes stack into one centered scrolling column with rem-sized type (the media
   query in `src/styles/layout.css`).
 
@@ -71,7 +71,6 @@ src/components/          FindMePane, Icon
 src/pages/               index and 404
 src/styles/global.css    theme tokens, @font-face, base styles
 src/styles/layout.css    stage geometry and the portrait/mobile switch
-src/content/projects/    future project-status Markdown (schema in src/content.config.ts)
 terraform/               infrastructure (see below)
 ```
 
